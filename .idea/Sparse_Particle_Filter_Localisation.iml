@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module classpath="CMake" type="PYTHON_MODULE" version="4">
+  <component name="TestRunnerService">
+    <option name="projectConfiguration" value="Twisted Trial" />
+    <option name="PROJECT_TEST_RUNNER" value="Twisted Trial" />
+  </component>
+</module>
