@@ -12,9 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b789a21f-0585-4d16-8867-6218b229ecd1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/particle_filter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/particle_filter.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -30,7 +28,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/helper_functions.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
+            <state relative-caret-position="285">
               <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="3" />
               <folding>
                 <element signature="e#57#74#0" expanded="true" />
@@ -42,7 +40,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/particle_filter.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1064">
+            <state relative-caret-position="662">
               <caret line="56" column="76" selection-start-line="56" selection-start-column="68" selection-end-line="56" selection-end-column="76" />
               <folding>
                 <element signature="e#55#72#0" expanded="true" />
@@ -54,8 +52,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/particle_filter.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
-              <caret line="231" column="37" selection-start-line="231" selection-start-column="37" selection-end-line="231" selection-end-column="37" />
+            <state relative-caret-position="304">
+              <caret line="177" column="59" lean-forward="true" selection-start-line="177" selection-start-column="59" selection-end-line="177" selection-end-column="59" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -84,8 +82,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="95" column="59" lean-forward="true" selection-start-line="95" selection-start-column="59" selection-end-line="95" selection-end-column="59" />
+            <state relative-caret-position="1805">
+              <caret line="95" column="59" selection-start-line="95" selection-start-column="59" selection-end-line="95" selection-end-column="59" />
               <folding>
                 <element signature="e#0#17#0" expanded="true" />
               </folding>
@@ -139,7 +137,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -156,6 +153,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -202,18 +200,19 @@
       <workItem from="1584778567365" duration="1522000" />
       <workItem from="1584958431591" duration="3969000" />
       <workItem from="1585140099440" duration="869000" />
-      <workItem from="1585212239405" duration="5282000" />
+      <workItem from="1585212239405" duration="5559000" />
+      <workItem from="1585228325259" duration="4914000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26192000" />
+    <option name="totallyTimeSpent" value="31383000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14759536" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14925373" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -227,7 +226,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32911393" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.23571429" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.23061225" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="bottom" id="Conan" order="13" />
       <window_info anchor="bottom" id="CMake" order="14" />
@@ -319,26 +318,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/helper_functions.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="3" />
-          <folding>
-            <element signature="e#57#74#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/particle_filter.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1064">
-          <caret line="56" column="76" selection-start-line="56" selection-start-column="68" selection-end-line="56" selection-end-column="76" />
-          <folding>
-            <element signature="e#55#72#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.clang-format">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1216">
@@ -355,18 +334,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="95" column="59" lean-forward="true" selection-start-line="95" selection-start-column="59" selection-end-line="95" selection-end-column="59" />
+        <state relative-caret-position="1805">
+          <caret line="95" column="59" selection-start-line="95" selection-start-column="59" selection-end-line="95" selection-end-column="59" />
           <folding>
             <element signature="e#0#17#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/helper_functions.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="3" />
+          <folding>
+            <element signature="e#57#74#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/particle_filter.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="662">
+          <caret line="56" column="76" selection-start-line="56" selection-start-column="68" selection-end-line="56" selection-end-column="76" />
+          <folding>
+            <element signature="e#55#72#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/particle_filter.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="231" column="37" selection-start-line="231" selection-start-column="37" selection-end-line="231" selection-end-column="37" />
+        <state relative-caret-position="304">
+          <caret line="177" column="59" lean-forward="true" selection-start-line="177" selection-start-column="59" selection-end-line="177" selection-end-column="59" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>

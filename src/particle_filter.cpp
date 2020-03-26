@@ -134,67 +134,67 @@ void ParticleFilter::dataAssociation(vector<LandmarkObs> predicted, vector<Landm
 void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], const vector<LandmarkObs>& observations,
                                    const Map& map_landmarks)
 {
-    // Transform observation to map coords, xp = particles, xc = observations
-    vector<LandmarkObs> tf_observations;
-
-    for (unsigned int i = 0; i < observations.size(); i++)
+    for (unsigned int i = 0; i < num_particles; i++)
     {
         // Assign individual components to matrix transform.
         double xp = particles[i].x;
         double yp = particles[i].y;
         double theta = particles[i].theta;
-        double xc = observations[i].x;
-        double yc = observations[i].y;
 
-        double xm = xp + (std::cos(theta) * xc) - (std::sin(theta) * yc);
-        double ym = yp + (std::sin(theta) * xc) + (std::cos(theta) * yc);
+        vector<LandmarkObs> tf_observations;
 
-        LandmarkObs tf_observation;
-        tf_observation.x = xm;
-        tf_observation.y = ym;
-        tf_observation.id = observations[i].id;
-
-        tf_observations.push_back(tf_observation);
-    }
-
-    // Filter landmarks to only that which is within the sensor range
-    vector<LandmarkObs> landmarks_in_range;
-    std::vector<Map::single_landmark_s> landmark_list = map_landmarks.landmark_list;
-
-    for (unsigned int i = 0; i < landmark_list.size(); i++)
-    {
-        // Calculate Euclidian Distance to Landmark
-        double distance = dist(particles[i].x, particles[i].y, landmark_list[i].x_f, landmark_list[i].y_f);
-
-        // Filter to only that distance this is within the sensor range
-        if (distance <= sensor_range)
+        for (int j = 0; j < observations.size() ; j++)
         {
-            LandmarkObs landmark_in_range;
-            landmark_in_range.x = landmark_list[i].x_f;
-            landmark_in_range.y = landmark_list[i].y_f;
-            landmark_in_range.id = landmark_list[i].id_i;
+            // Transform observation to map coords, xp = particles, xc = observations
+            LandmarkObs tf_observation;
 
-            landmarks_in_range.push_back(landmark_in_range);
+            double xc = observations[j].x;
+            double yc = observations[j].y;
+
+            double xm = xp + (std::cos(theta) * xc) - (std::sin(theta) * yc);
+            double ym = yp + (std::sin(theta) * xc) + (std::cos(theta) * yc);
+
+
+            tf_observation.x = xm;
+            tf_observation.y = ym;
+            tf_observation.id = observations[i].id;
+
+            tf_observations.push_back(tf_observation);
         }
-    }
 
-    // Use dataAssociation to update the observations with the ID of the nearest landmark
-    dataAssociation(landmarks_in_range, tf_observations);
+        // Filter landmarks to only that which is within the sensor range
+        vector<LandmarkObs> landmarks_in_range;
+        std::vector<Map::single_landmark_s> landmark_list = map_landmarks.landmark_list;
 
-    // Calculate the weight of each particle using multivariate gaussian probability density function
-    double sig_x = std_landmark[0];
-    double sig_y = std_landmark[1];
-    double var_x = sig_x * sig_x;
-    double var_y = sig_y * sig_y;
-    double gaussian_norm = 1.0 / (2.0 * M_PI * sig_x * sig_y);
+        for (int k = 0; k < landmark_list.size(); k++)
+        {
+            // Calculate Euclidian Distance to Landmark
+            double distance = dist(xp, yp, landmark_list[k].x_f, landmark_list[k].y_f);
 
-    // Calculate the multivariate gaussian distribution and update the weight
-    for (int i = 0; i < num_particles; i++)
-    {
+            // Filter to only that distance this is within the sensor range
+            if (distance <= sensor_range)
+            {
+                LandmarkObs landmark_in_range;
+                landmark_in_range.x = landmark_list[k].x_f;
+                landmark_in_range.y = landmark_list[k].y_f;
+                landmark_in_range.id = landmark_list[k].id_i;
+
+                landmarks_in_range.push_back(landmark_in_range);
+            }
+        }
+
+        // Use dataAssociation to update the observations with the ID of the nearest landmark
+        dataAssociation(landmarks_in_range, tf_observations);
+
+        // Calculate the weight of each particle using multivariate gaussian probability density function
+        double sig_x = std_landmark[0];
+        double sig_y = std_landmark[1];
+        double var_x = sig_x * sig_x;
+        double var_y = sig_y * sig_y;
+        double gaussian_norm = 1.0 / (2.0 * M_PI * sig_x * sig_y);
+
         // Reset the particles weight
         particles[i].weight = 1.0;
-
-        // Initialise a var for the weight calculation
         double weight = 1.0;
 
         for (unsigned int j = 0; j < tf_observations.size(); j++)
@@ -206,7 +206,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
             double mu_x;
             double mu_y;
 
-            for (unsigned int k = 0; k < landmarks_in_range.size(); ++k)
+            for (unsigned int k = 0; k < landmarks_in_range.size(); k++)
             {
                 double ldmk_x = landmarks_in_range[k].x;
                 double ldmk_y = landmarks_in_range[k].y;
@@ -217,7 +217,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
                 {
                     mu_x = ldmk_x;
                     mu_y = ldmk_y;
-                    break;
                 }
             }
 
@@ -225,7 +224,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
             double exponent_x = ((tf_x - mu_x) * (tf_x - mu_x)) / (2.0 * var_x);
             double exponent_y = ((tf_y - mu_y) * (tf_y - mu_y)) / (2.0 * var_y);
 
-            weight *= gaussian_norm * std::exp((-1.0 * (exponent_x + exponent_y)));
+            weight *= (gaussian_norm * exp(-(exponent_x + exponent_y)));
         }
 
         // Assign final weight values
