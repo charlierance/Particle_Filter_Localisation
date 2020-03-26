@@ -45,6 +45,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[])
         particle.weight = init_weight;
 
         particles.push_back(particle);
+        weights.push_back(init_weight);
     }
 
     // Mark as initialised
@@ -183,8 +184,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
     // Calculate the weight of each particle using multivariate gaussian probability density function
     double sig_x = std_landmark[0];
     double sig_y = std_landmark[1];
-    double var_x = std::pow(sig_x, 2.0);
-    double var_y = std::pow(sig_y, 2.0);
+    double var_x = sig_x * sig_x;
+    double var_y = sig_y * sig_y;
     double gaussian_norm = 1.0 / (2.0 * M_PI * sig_x * sig_y);
 
     // Calculate the multivariate gaussian distribution and update the weight
@@ -229,6 +230,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
 
         // Assign final weight values
         particles[i].weight = weight;
+        weights[i] = weight;
     }
 }
 
