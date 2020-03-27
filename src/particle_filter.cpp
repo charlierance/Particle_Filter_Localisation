@@ -54,7 +54,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[])
 
 void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate)
 {
-    // Define a gaussian distribution of noise with a mean of zero and a pre defined StdDev
+    // Define a gaussian distribution of noise with a mea[ of zero and a pre defined StdDev
     std::default_random_engine gen;
 
     int mean = 0;
@@ -80,7 +80,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
         double theta = particles[i].theta;
 
         // Update predictions based on yaw rate
-        if (yaw_rate > 0.0001)
+        if (fabs(yaw_rate) > 0.0001)
         {
             x_pred = x_0 + (velocity / yaw_rate) * (std::sin((theta + (yaw_rate * delta_t)) - std::sin(theta)));
             y_pred = y_0 + (velocity / yaw_rate) * (std::cos(theta) - std::cos((theta + (yaw_rate * delta_t))));
@@ -195,7 +195,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
 
         // Reset the particles weight
         particles[i].weight = 1.0;
-        double weight = 1.0;
 
         for (unsigned int j = 0; j < tf_observations.size(); j++)
         {
@@ -224,12 +223,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
             double exponent_x = ((tf_x - mu_x) * (tf_x - mu_x)) / (2.0 * var_x);
             double exponent_y = ((tf_y - mu_y) * (tf_y - mu_y)) / (2.0 * var_y);
 
-            weight *= (gaussian_norm * exp(-(exponent_x + exponent_y)));
+            particles[i].weight *= (gaussian_norm * exp(-(exponent_x + exponent_y)));
+            weights[i] = particles[i].weight;
         }
-
-        // Assign final weight values
-        particles[i].weight = weight;
-        weights[i] = weight;
     }
 }
 
