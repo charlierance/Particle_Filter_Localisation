@@ -105,6 +105,7 @@ class ParticleFilter
     // Set of current particles
     std::vector<Particle> particles;
 
+
   private:
     // Number of particles to draw
     int num_particles;
@@ -117,6 +118,8 @@ class ParticleFilter
 
     // Value to initialise weights
     double init_weight = 1.0;
+
+    double weight_normaliser;
 };
 
 #endif  // PARTICLE_FILTER_H_

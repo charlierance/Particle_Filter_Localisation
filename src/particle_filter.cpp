@@ -143,7 +143,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
 
         vector<LandmarkObs> tf_observations;
 
-        for (int j = 0; j < observations.size() ; j++)
+        for (int j = 0; j < observations.size(); j++)
         {
             // Transform observation to map coords, xp = particles, xc = observations
             LandmarkObs tf_observation;
@@ -154,10 +154,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
             double xm = xp + (std::cos(theta) * xc) - (std::sin(theta) * yc);
             double ym = yp + (std::sin(theta) * xc) + (std::cos(theta) * yc);
 
-
             tf_observation.x = xm;
             tf_observation.y = ym;
-            tf_observation.id = observations[i].id;
+            tf_observation.id = observations[j].id;
 
             tf_observations.push_back(tf_observation);
         }
@@ -172,7 +171,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
             double distance = dist(xp, yp, landmark_list[k].x_f, landmark_list[k].y_f);
 
             // Filter to only that distance this is within the sensor range
-            if (distance <= sensor_range)
+            if (fabs(distance) <= sensor_range)
             {
                 LandmarkObs landmark_in_range;
                 landmark_in_range.x = landmark_list[k].x_f;
