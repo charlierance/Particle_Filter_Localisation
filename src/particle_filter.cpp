@@ -80,16 +80,14 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
         double theta = particles[i].theta;
 
         // Update predictions based on yaw rate
-        if (fabs(yaw_rate) > 0.0001)
-        {
-            x_pred = x_0 + (velocity / yaw_rate) * (std::sin((theta + (yaw_rate * delta_t)) - std::sin(theta)));
-            y_pred = y_0 + (velocity / yaw_rate) * (std::cos(theta) - std::cos((theta + (yaw_rate * delta_t))));
-            theta_pred = theta + (yaw_rate * delta_t);
+        if(fabs(yaw_rate) > 0.0001 ){
+            x_pred = x_0 + (velocity/yaw_rate) * (std::sin(theta + yaw_rate * delta_t) - std::sin(theta)) ;
+            y_pred = y_0 + (velocity/yaw_rate) * (std::cos(theta) - std::cos(theta + yaw_rate * delta_t)) ;
+            theta_pred = theta + yaw_rate * delta_t ;
         }
-        else
-        {
-            x_pred = x_0 + (velocity * delta_t) * std::cos(theta);
-            y_pred = y_0 + (velocity * delta_t) + std::sin(theta);
+        else{
+            x_pred = x_0 + velocity * delta_t * cos(theta);
+            y_pred = y_0 + velocity * delta_t * sin(theta) ;
             theta_pred = theta;
         }
 
@@ -156,7 +154,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
 
             tf_observation.x = xm;
             tf_observation.y = ym;
-            tf_observation.id = j; //TODO: THIS IS ZERO FOR SOME REASON!
+            tf_observation.id = j;
 
             tf_observations.push_back(tf_observation);
         }
@@ -241,7 +239,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
 void ParticleFilter::resample()
 {
     // Sampled particle set
-    vector<Particle> sampled_particles(num_particles);
+    vector<Particle> sampled_particles;
 
     std::default_random_engine gen;
     std::discrete_distribution <int> sample(weights.begin(), weights.end());
