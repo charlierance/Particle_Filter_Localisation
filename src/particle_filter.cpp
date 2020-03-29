@@ -45,7 +45,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[])
         particle.weight = init_weight;
 
         particles.push_back(particle);
-        weights.push_back(init_weight);
+        weights.push_back(1.0);
     }
 
     // Mark as initialised
@@ -115,7 +115,7 @@ void ParticleFilter::dataAssociation(vector<LandmarkObs> predicted, vector<Landm
         // Iterate over each prediction to find nearest neighbour
         for (unsigned int j = 0; j < predicted.size(); j++)
         {
-            LandmarkObs pred = predicted[i];
+            LandmarkObs pred = predicted[j];
 
             double euclidian_distance = dist(obs.x, obs.y, pred.x, pred.y);
 
@@ -156,27 +156,26 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
 
             tf_observation.x = xm;
             tf_observation.y = ym;
-            tf_observation.id = observations[j].id;
+            tf_observation.id = j; //TODO: THIS IS ZERO FOR SOME REASON!
 
             tf_observations.push_back(tf_observation);
         }
 
         // Filter landmarks to only that which is within the sensor range
         vector<LandmarkObs> landmarks_in_range;
-        std::vector<Map::single_landmark_s> landmark_list = map_landmarks.landmark_list;
 
-        for (int k = 0; k < landmark_list.size(); k++)
+        for (int k = 0; k < map_landmarks.landmark_list.size(); k++)
         {
             // Calculate Euclidian Distance to Landmark
-            double distance = dist(xp, yp, landmark_list[k].x_f, landmark_list[k].y_f);
+            double distance = dist(xp, yp, map_landmarks.landmark_list[k].x_f, map_landmarks.landmark_list[k].y_f);
 
             // Filter to only that distance this is within the sensor range
-            if (fabs(distance) <= sensor_range)
+            if (distance <= sensor_range)
             {
                 LandmarkObs landmark_in_range;
-                landmark_in_range.x = landmark_list[k].x_f;
-                landmark_in_range.y = landmark_list[k].y_f;
-                landmark_in_range.id = landmark_list[k].id_i;
+                landmark_in_range.x = map_landmarks.landmark_list[k].x_f;
+                landmark_in_range.y = map_landmarks.landmark_list[k].y_f;
+                landmark_in_range.id = map_landmarks.landmark_list[k].id_i;
 
                 landmarks_in_range.push_back(landmark_in_range);
             }
@@ -195,14 +194,13 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
         // Reset the particles weight
         particles[i].weight = 1.0;
 
+        double probability = 1.0;
+
         for (unsigned int j = 0; j < tf_observations.size(); j++)
         {
             double tf_x = tf_observations[j].x;
             double tf_y = tf_observations[j].y;
             double tf_id = tf_observations[j].id;
-
-            double mu_x;
-            double mu_y;
 
             for (unsigned int k = 0; k < landmarks_in_range.size(); k++)
             {
@@ -213,18 +211,30 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
                 // Find matching landmarks and observations
                 if (tf_id == ldmk_id)
                 {
-                    mu_x = ldmk_x;
-                    mu_y = ldmk_y;
+                    double mu_x = ldmk_x;
+                    double mu_y = ldmk_y;
+
+                    // Calculate the gaussian probability for each observation and obtain the product
+                    double exponent_x = ((tf_x - mu_x) * (tf_x - mu_x)) / (2.0 * var_x);
+                    double exponent_y = ((tf_y - mu_y) * (tf_y - mu_y)) / (2.0 * var_y);
+
+                    probability = probability * gaussian_norm * exp(-(exponent_x + exponent_y));
+                    std::cout << (exponent_x + exponent_y) << std::endl;
+                    break;
+
                 }
             }
-
-            // Calculate the gaussian probability for each observation and obtain the product
-            double exponent_x = ((tf_x - mu_x) * (tf_x - mu_x)) / (2.0 * var_x);
-            double exponent_y = ((tf_y - mu_y) * (tf_y - mu_y)) / (2.0 * var_y);
-
-            particles[i].weight *= (gaussian_norm * exp(-(exponent_x + exponent_y)));
-            weights[i] = particles[i].weight;
         }
+
+        particles[i].weight = probability;
+        weights[i] = probability;
+    }
+
+    double weight_normalizer = std::accumulate(weights.begin(), weights.end(),0.0f);
+
+    for (int p = 0; p < num_particles; ++p){
+        particles[p].weight = particles[p].weight / weight_normalizer;
+        weights[p] = particles[p].weight;
     }
 }
 
@@ -233,19 +243,14 @@ void ParticleFilter::resample()
     // Sampled particle set
     vector<Particle> sampled_particles(num_particles);
 
-    // Sample dependant on the weights, higher weights increase likelihood of being picked
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::discrete_distribution<> dist(weights.begin(), weights.end());
+    std::default_random_engine gen;
+    std::discrete_distribution <int> sample(weights.begin(), weights.end());
 
-    // Iterate over all particles and resample
-    for (int i = 0; i < num_particles; i++)
-    {
-        int index = dist(gen);
-        sampled_particles[i] = particles[index];
+    for ( int i = 0; i < num_particles; ++i){
+        int k = sample(gen);
+        sampled_particles.push_back(particles[k]);
     }
 
-    // Reassign particles
     particles = sampled_particles;
 }
 
