@@ -70,9 +70,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
     for (int i = 0; i < num_particles; i++)
     {
         // Define Predictions
-        double x_pred;
-        double y_pred;
-        double theta_pred;
+        double x_pred, y_pred, theta_pred;
 
         // Define particle components
         double x_0 = particles[i].x;
@@ -80,14 +78,16 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
         double theta = particles[i].theta;
 
         // Update predictions based on yaw rate
-        if(fabs(yaw_rate) > 0.0001 ){
-            x_pred = x_0 + (velocity/yaw_rate) * (std::sin(theta + yaw_rate * delta_t) - std::sin(theta)) ;
-            y_pred = y_0 + (velocity/yaw_rate) * (std::cos(theta) - std::cos(theta + yaw_rate * delta_t)) ;
-            theta_pred = theta + yaw_rate * delta_t ;
+        if (fabs(yaw_rate) > 0.0001)
+        {
+            x_pred = x_0 + (velocity / yaw_rate) * (std::sin(theta + yaw_rate * delta_t) - std::sin(theta));
+            y_pred = y_0 + (velocity / yaw_rate) * (std::cos(theta) - std::cos(theta + yaw_rate * delta_t));
+            theta_pred = theta + yaw_rate * delta_t;
         }
-        else{
+        else
+        {
             x_pred = x_0 + velocity * delta_t * cos(theta);
-            y_pred = y_0 + velocity * delta_t * sin(theta) ;
+            y_pred = y_0 + velocity * delta_t * sin(theta);
             theta_pred = theta;
         }
 
@@ -132,7 +132,7 @@ void ParticleFilter::dataAssociation(vector<LandmarkObs> predicted, vector<Landm
 void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], const vector<LandmarkObs>& observations,
                                    const Map& map_landmarks)
 {
-    for (unsigned int i = 0; i < num_particles; i++)
+    for (int i = 0; i < num_particles; i++)
     {
         // Assign individual components to matrix transform.
         double xp = particles[i].x;
@@ -141,7 +141,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
 
         vector<LandmarkObs> tf_observations;
 
-        for (int j = 0; j < observations.size(); j++)
+        for (unsigned int j = 0; j < observations.size(); j++)
         {
             // Transform observation to map coords, xp = particles, xc = observations
             LandmarkObs tf_observation;
@@ -162,7 +162,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
         // Filter landmarks to only that which is within the sensor range
         vector<LandmarkObs> landmarks_in_range;
 
-        for (int k = 0; k < map_landmarks.landmark_list.size(); k++)
+        for (unsigned int k = 0; k < map_landmarks.landmark_list.size(); k++)
         {
             // Calculate Euclidian Distance to Landmark
             double distance = dist(xp, yp, map_landmarks.landmark_list[k].x_f, map_landmarks.landmark_list[k].y_f);
@@ -217,9 +217,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
                     double exponent_y = ((tf_y - mu_y) * (tf_y - mu_y)) / (2.0 * var_y);
 
                     probability = probability * gaussian_norm * exp(-(exponent_x + exponent_y));
-                    std::cout << (exponent_x + exponent_y) << std::endl;
                     break;
-
                 }
             }
         }
@@ -228,9 +226,11 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], c
         weights[i] = probability;
     }
 
-    double weight_normalizer = std::accumulate(weights.begin(), weights.end(),0.0f);
+    // Normalise the probability
+    double weight_normalizer = std::accumulate(weights.begin(), weights.end(), 0.0f);
 
-    for (int p = 0; p < num_particles; ++p){
+    for (int p = 0; p < num_particles; ++p)
+    {
         particles[p].weight = particles[p].weight / weight_normalizer;
         weights[p] = particles[p].weight;
     }
@@ -242,9 +242,10 @@ void ParticleFilter::resample()
     vector<Particle> sampled_particles;
 
     std::default_random_engine gen;
-    std::discrete_distribution <int> sample(weights.begin(), weights.end());
+    std::discrete_distribution<int> sample(weights.begin(), weights.end());
 
-    for ( int i = 0; i < num_particles; ++i){
+    for (int i = 0; i < num_particles; ++i)
+    {
         int k = sample(gen);
         sampled_particles.push_back(particles[k]);
     }
