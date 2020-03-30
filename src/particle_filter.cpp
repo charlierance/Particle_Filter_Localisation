@@ -16,7 +16,7 @@ using std::vector;
 
 void ParticleFilter::init(double x, double y, double theta, double std[])
 {
-    num_particles = 100;  // TODO: Verify this parameter, is processing taking too long?
+    num_particles = 100;
 
     // Initialise with a gaussian based on GPS
     std::default_random_engine gen;
